@@ -1,3 +1,5 @@
+import Mathlib.Data.Stream.Defs
+
 -- 7 Functors
 -- 7.1 Functors in Programming
 
