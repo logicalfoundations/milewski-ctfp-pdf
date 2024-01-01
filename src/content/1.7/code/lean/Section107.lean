@@ -1,5 +1,6 @@
 -- 7 Functors
 -- 7.1 Functors in Programming
+
 -- snippet 01
 inductive Maybe (a : Type) : Type where
   | Nothing : Maybe a
@@ -33,10 +34,9 @@ namespace snippets05thru09
   def id (a : Type) : a → a := λ x => x
 
   -- snippet 08
-  example : (∀ x : Maybe a, fmap (id a) x = id (Maybe a) x) :=
-    λ x => match x with
-      | Nothing => rfl
-      | Just _ => rfl
+  example : (∀ x : Maybe a, fmap (id a) x = id (Maybe a) x) := λ x => match x with
+    | Nothing => rfl
+    | Just _ => rfl
 
   example : fmap (id a) Nothing = id (Maybe a) Nothing := rfl
 
@@ -162,3 +162,51 @@ namespace snippet25
   instance : Functor (Const c) where
     fmap := λ _ (const v) => const v
 end snippet25
+
+-- 7.3 Functor Composition
+
+namespace snippets29thru31
+  class Functor (f : Type → Type) where
+    fmap : (a → b) → f a → f b
+  open Functor
+
+  instance : Functor Maybe where
+    fmap := λ f ma => match ma with
+      | Nothing => Nothing
+      | Just x => Just (f x)
+
+  instance : Functor List where
+    fmap := λ f la => match la with
+      | [] => []
+      | x :: xs => (f x) :: (Functor.map f xs)
+
+  -- snippet 29
+  def maybeTail : List a → Maybe (List a) :=
+    λ la => match la with
+      | [] => Nothing
+      | _ :: xs => Just xs
+
+  -- snippet 30
+  def square : Int → Int := λ x => x * x
+
+  def mis : Maybe (List Int) := Just (1 :: 2 :: 3 :: [])
+
+  def mis2 := fmap (fmap square) mis
+
+  -- snippet 31
+  def mis2' := (fmap ∘ fmap) square mis
+
+end snippets29thru31
+
+namespace snippets32thru35
+  variable
+    (f : Type → Type)
+    -- snippet 32
+    (fmap : (a → b) → (f a → f b))
+    -- snippet 33
+    (square : Int → Int)
+    -- snippet 34
+    (_ : List Int → List Int)
+    -- snippet 35
+    (_ : Maybe (List Int) → Maybe (List Int))
+end snippets32thru35
