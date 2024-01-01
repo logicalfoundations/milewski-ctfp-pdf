@@ -1,6 +1,5 @@
 -- 7 Functors
 -- 7.1 Functors in Programming
-
 -- snippet 01
 inductive Maybe (a : Type) : Type where
   | Nothing : Maybe a
@@ -34,9 +33,10 @@ namespace snippets05thru09
   def id (a : Type) : a → a := λ x => x
 
   -- snippet 08
-  example : (∀ x : Maybe a, fmap (id a) x = id (Maybe a) x) := λ x => match x with
-    | Nothing => rfl
-    | Just _ => rfl
+  example : (∀ x : Maybe a, fmap (id a) x = id (Maybe a) x) :=
+    λ x => match x with
+      | Nothing => rfl
+      | Just _ => rfl
 
   example : fmap (id a) Nothing = id (Maybe a) Nothing := rfl
 
@@ -50,3 +50,115 @@ namespace snippets05thru09
       | Just _ => rfl
 
 end snippets05thru09
+
+-- Type classes
+
+namespace snippet10
+  -- snippet 10
+  class Eq (a : Type) where
+    eq : a → a → Bool
+
+  open Eq
+  infix:50 "==" => eq
+
+  -- snippet 11
+  inductive Point : Type where
+    | Pt : Float → Float → Point
+
+  open Point
+
+  -- snippet 12
+  instance : Eq Point where
+    eq := λ (Pt x y) (Pt x' y') => x == x' && y == y'
+
+end snippet10
+
+namespace snippet13thru18
+  -- snippet 13
+  class Functor (f : Type → Type) where
+    fmap : (a → b) → f a → f b
+
+  -- snippet 14
+  instance : Functor Maybe where
+    fmap := λ f ma => match ma with
+      | Nothing => Nothing
+      | Just x => Just (f x)
+
+  -- snippet 15
+  inductive List (a : Type) : Type where
+    | Nil : List a
+    | Cons : a → List a → List a
+  open List
+
+  -- snippet 16
+  def fmap : (a → b) → List a → List b :=
+  -- snippet 17
+    λ f la => match la with
+      | Nil => Nil
+      | Cons x xs => Cons (f x) (fmap f xs)
+
+  -- snippet 18
+  instance : Functor List where
+    fmap := λ f la => match la with
+      | Nil => Nil
+      | Cons x xs => Cons (f x) (fmap f xs)
+end snippet13thru18
+
+namespace snippet19thru24
+  class Functor (f : Type → Type) where
+    fmap : (a → b) → f a → f b
+  variable
+    (a b f : Type)
+  def arrow : Type → Type → Type := λ a b => a → b
+
+  prefix:10 "->" => arrow
+
+  -- snippet 19
+  #check (-> a) b
+
+  -- snippet 20
+  #check -> a
+
+  -- snippet 21
+  def fmap : (a → b) → (r → a) → (r → b) :=
+    λ f g => f ∘ g
+
+  -- snippet 22
+  instance : Functor (-> a) where
+    fmap := λ f g => f ∘ g
+
+  prefix:10 " ∘ " => Function.comp
+
+  -- snippet 23
+  instance : Functor (-> a) where
+    fmap := λ f g => (∘ f) g
+
+  -- snippet 24
+  instance : Functor (-> a) where
+    fmap := Function.comp
+end snippet19thru24
+
+
+-- 7.2 Functors as Containers
+
+-- snippet 25
+-- def nats : ℕ → ℕ := λ n => n + 1
+-- def natural_numbers : stream ℕ := nat.stream nats 1
+
+namespace snippet25
+  -- snippet 26
+  inductive Const (c : Type)(a : Type) : Type where
+    | const : c → Const c a
+
+  open Const
+  -- snippet 27
+  def fmap : (a → b) → Const c a → Const c b :=
+    λ _ (const c) => const c
+
+  class Functor (f : Type → Type) where
+    fmap : (a → b) → f a → f b
+
+  -- snippet 28
+  instance : Functor (Const c) where
+    fmap := λ _ (const v) => const v
+end snippet25
