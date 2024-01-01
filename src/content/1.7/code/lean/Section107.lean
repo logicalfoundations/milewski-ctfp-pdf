@@ -142,8 +142,7 @@ end snippet19thru24
 -- 7.2 Functors as Containers
 
 -- snippet 25
--- def nats : ℕ → ℕ := λ n => n + 1
--- def natural_numbers : stream ℕ := nat.stream nats 1
+def nats := Nat.iterate Nat.succ 1
 
 namespace snippet25
   -- snippet 26

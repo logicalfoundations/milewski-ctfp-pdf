@@ -1,2 +1,1 @@
-nats :: [Integer]
-nats = [1..]
+def nats := Nat.iterate Nat.succ 1
