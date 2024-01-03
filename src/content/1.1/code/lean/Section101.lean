@@ -1,18 +1,17 @@
+-- 1 Category: The Essence of Composition ---------------------------------------
+-- 1.1 Arrows as Functions ------------------------------------------------------
 variable (A B C D : Type)
--- snippet 1
-variable (f : A → B)
--- snippet 2
-variable (g : B → C)
+variable (f : A → B)   -- snippet 1
+variable (g : B → C)   -- snippet 2
+#check g ∘ f           -- snippet 3
 
--- snippet 3
-#check g ∘ f
-
+-- 1.2 Properties of Composition -----------------------------------------------
 -- snippet 4
-variable
-  (f : A → B)
-  (g : B → C)
-  (h : C → D)
-example : h ∘ (g ∘ f) = (h ∘ g) ∘ f := rfl
+example :
+  ∀ {f : A → B}
+    {g : B → C}
+    {h : C → D},
+    h ∘ (g ∘ f) = (h ∘ g) ∘ f := rfl
 
 -- snippet 5
 namespace snippet5
@@ -23,3 +22,5 @@ end snippet5
 -- snippet 6
 example : f ∘ id = f := rfl
 example : id ∘ f = f := rfl
+
+-- 1.3 Composition is the Essence of Programming --------------------------------

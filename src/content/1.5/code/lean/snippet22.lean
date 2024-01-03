@@ -1,2 +1,2 @@
-example : i' = m ∘ i := sorry
-example : j' = m ∘ j := sorry
+i' = m ∘ i
+j' = m ∘ j

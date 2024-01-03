@@ -1,3 +1,7 @@
+-- 4 Kleisli Categories ---------------------------------------------------------
+-- 4.1 The Writer Category ------------------------------------------------------
+-- 4.2 Writer in Haskell --------------------------------------------------------
+
 -- snippet 01
 def Writer : Type → Type := λ a => a × String
 
@@ -15,9 +19,10 @@ def fish : (a → Writer b) → (b → Writer c) → (a → Writer c) :=
              (z, s ++ t)
 infix:55 ">=>" => fish
 
+name
 -- snippet 04
-def _return : a → Writer a := λ x => (x, "")
--- (prepending `_` to avoid name clash with Lean's `return`)
+def ret : a → Writer a := λ x => (x, "")
+-- (using "ret" here since repending `_` to avoid name clash with Lean's `return`)
 
 -- snippet 05
 def upCase : String → Writer String := λ s => (s.toUpper, "upCase ")
@@ -28,3 +33,5 @@ def toWords : String → Writer (List String) :=
 -- snippet 06
 def process : String → Writer (List String) :=
   upCase >=> toWords
+
+-- 4.3 Kleisli Categories -------------------------------------------------------
