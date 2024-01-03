@@ -1,1 +1,1 @@
-def Reader (r a : Type) : Type := r → a
+def Reader (r : Type) (a : Type) := r → a
