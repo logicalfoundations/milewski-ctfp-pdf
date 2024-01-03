@@ -1,8 +1,7 @@
+-- 7 Functors -------------------------------------------------------------------
 import Mathlib.Data.Stream.Defs
 
--- 7 Functors
--- 7.1 Functors in Programming
-
+-- 7.1 Functors in Programming --------------------------------------------------
 -- snippet 01
 inductive Maybe (a : Type) : Type where
   | Nothing : Maybe a
@@ -140,11 +139,9 @@ namespace snippet19thru24
     fmap := Function.comp
 end snippet19thru24
 
-
--- 7.2 Functors as Containers
-
+-- 7.2 Functors as Containers ---------------------------------------------------
 -- snippet 25
-def nats := Nat.iterate Nat.succ 1
+def nats := Stream'.iterate Nat.succ 1
 
 namespace snippet25
   -- snippet 26
@@ -164,8 +161,7 @@ namespace snippet25
     fmap := λ _ (const v) => const v
 end snippet25
 
--- 7.3 Functor Composition
-
+-- 7.3 Functor Composition ------------------------------------------------------
 namespace snippets29thru31
   class Functor (f : Type → Type) where
     fmap : (a → b) → f a → f b
