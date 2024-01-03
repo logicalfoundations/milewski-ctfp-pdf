@@ -107,11 +107,11 @@ namespace snippet14and15
   open Tree
 
   -- snippet 15
-  def treeMap : (a → b) → Tree a → Tree b := λ f x => match x with
+  def mapTree : (a → b) → Tree a → Tree b := λ f x => match x with
     | (Leaf x) => Leaf (f x)
-    | (Node l r) => Node (treeMap f l) (treeMap f r)
+    | (Node l r) => Node (mapTree f l) (mapTree f r)
   instance : Functor Tree where
-    fmap := treeMap
+    fmap := mapTree
 end snippet14and15
 
 namespace snippet16thru28
@@ -127,20 +127,20 @@ namespace snippet16thru28
       let (y, s1) := m1 x
       let (z, s2) := m2 y
       (z, s1 ++ s2)
-
   infixr:55 " >=> " => fish
 
   -- snippet 18
-  def _return : a → Writer a := λ x => (x, "")
+  def ret : a → Writer a := λ x => (x, "")
+-- (using "ret" here since "return" is a keyword in Lean)
 
   instance : Functor Writer where
     -- snippet 19
-    fmap := λ f => id >=> (λ x => _return (f x))
+    fmap := λ f => id >=> (λ x => ret (f x))
 
   variable (r : Type)
 
   -- snippet 20
-  #check λ a => (r → a)
+  #check λ a => r → a
 
   -- snippet 21
   def Reader (r a : Type) : Type := r → a
@@ -176,14 +176,19 @@ end snippet16thru28
 
 namespace snippet29and30
   -- snippet 29
-  class Profunctor (p : Type u → Type v → Type w) where
-    dimap : (a → b) → (c → d) → p b c → p a d := λ f g => lmap f ∘ rmap g
+  class Profunctor (p : Type → Type → Type)  where
+    dimap : (a → b) → (c → d) → p b c → p a d
     lmap : (a → b) → p b c → p a c := λ f => dimap f id
     rmap : (b → c) → p a b → p a c := λ g => dimap id g
+  open Profunctor
+  axiom profunctor_law : ∀ {a b c d} p [Profunctor p]
+    (f : a → b) (g : c → d) (x : p b c),
+    dimap f g x = lmap f (rmap g x)
 
-    -- snippet 30
-  instance : Profunctor Reader where
+  -- snippet 30
+  instance : Profunctor (λ r a => r → a) where
     dimap := λ ab cd bc => cd ∘ bc ∘ ab
     lmap := λ f g => g ∘ f
     rmap := λ f g => f ∘ g
+
 end snippet29and30

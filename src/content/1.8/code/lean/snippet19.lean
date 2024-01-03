@@ -1,1 +1,1 @@
-fmap := λ f => id >=> (λ x => _return (f x))
+fmap := λ f => id >=> (λ x => ret (f x))
