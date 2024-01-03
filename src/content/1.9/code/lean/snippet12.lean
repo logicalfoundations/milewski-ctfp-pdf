@@ -1,1 +1,1 @@
-eval :: ((a -> b), a) -> b
+eval : (a → b) × a → b
