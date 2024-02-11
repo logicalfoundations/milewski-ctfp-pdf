@@ -1,3 +1,3 @@
 instance : Monoid String where
-  mempty := ""
+  mempty  := ""
   mappend := λ x y => x ++ y

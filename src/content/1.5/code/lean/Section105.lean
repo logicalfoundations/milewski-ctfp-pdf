@@ -1,9 +1,10 @@
--- 5 Products and Coproducts
+-- 5 Products and Coproducts ----------------------------------------------------
 
+-- 5.1 Initial Object -----------------------------------------------------------
 -- snippet 01
 variable (absurd : False → a)
 
--- 5.2 Terminal Object
+-- 5.2 Terminal Object ----------------------------------------------------------
 -- snippet 02
 def unit : a → Unit := λ _ => ()
 
@@ -13,25 +14,19 @@ def yes : a → Bool := λ _ => true
 -- snippet 04
 def no : a → Bool := λ _ => false
 
--- 5.3 Duality
-
--- 5.4 Isomorphisms
-
+-- 5.3 Duality ------------------------------------------------------------------
+-- 5.4 Isomorphisms -------------------------------------------------------------
 variable (f : a → b) (g : b → a)
-example :
-  f ∘ g = id     -- snippet 05
-  := sorry
-example :
-  g ∘ f = id     -- snippet 05
-   := sorry
+-- snippet 05
+#check f ∘ g = id
+#check g ∘ f = id
 
--- 5.5 Products
-
+-- 5.5 Products -----------------------------------------------------------------
 -- snippet 06
-def fst : a × b → a := λ (x, y) => x
+def fst : a × b → a := λ (x, _) => x
 
 -- snippet 07
-def snd : a × b → b := λ (x, y) => y
+def snd : a × b → b := λ (_, y) => y
 
 -- snippet 08
 -- λ (x, _) => x
@@ -84,8 +79,8 @@ namespace snippet16
     (p : Int × Int × Bool → Int)
     (q : Int × Int × Bool → Bool)
   -- snippet 16
-  example : fst = p ∘ m' := sorry
-  example : snd = q ∘ m' := sorry
+  #check fst = p ∘ m'
+  #check snd = q ∘ m'
 end snippet16
 
 namespace snippet17
@@ -107,8 +102,7 @@ namespace snippet20
     λ p q x => (p x, q x)
 end snippet20
 
--- 5.6 Coproduct
-
+-- 5.6 Coproduct ----------------------------------------------------------------
 namespace snippet21
   variable
     -- snippet 21
@@ -121,8 +115,8 @@ namespace snippet22
     (i : a → c)(j : b → c)
     (m : c → c')
     -- snippet 22
-    example : i' = m ∘ i := sorry
-    example : j' = m ∘ j := sorry
+    def i' := m ∘ i
+    def j' := m ∘ j
 end snippet22
 
 -- snippet 23
@@ -148,16 +142,15 @@ def factorizer : (a → c) → (b → c) → Either a b → c :=
     | Left  a => i a
     | Right b => j b
 
--- 5.7 Asymmetry
-
+-- 5.7 Asymmetry ----------------------------------------------------------------
 namespace snippet27
   variable
     (m : c → a × b )
     (p : c → a)
     (q : c → b)
   -- snippet 27
-  example : p = fst ∘ m := sorry
-  example : q = snd ∘ m := sorry
+  #check p = fst ∘ m
+  #check q = snd ∘ m
 end snippet27
 
 namespace snippet28
@@ -165,7 +158,7 @@ namespace snippet28
     (m : Unit → a × b )
     (p : Unit → a)
     (q : Unit → b)
-  -- snippet 28
-  example : p () = fst (m ()) := sorry
-  example : q () = snd (m ()) := sorry
+  -- snippet 27
+  #check p () = fst (m ())
+  #check q () = snd (m ())
 end snippet28

@@ -1,5 +1,8 @@
+-- 8 Functoriality --------------------------------------------------------------
+
 import Mathlib.Control.Bifunctor
 
+-- 8.1 Bifunctors
 namespace snippets01thru04
   -- snippet 01
   class Bifunctor (f : Type → Type → Type) where
@@ -10,6 +13,7 @@ namespace snippets01thru04
   axiom bimap_law : ∀ (f : Type → Type → Type) [Bifunctor f] {a b c d : Type}
     (g : a → c) (h : b → d) (x : f a b), (bimap g h x) = (first g (second h x))
 
+-- 8.2 Product and Coproduct Bifunctors ----------------------------------------
   -- snippet 02
   instance : Bifunctor Prod where
     bimap := λ f g pr => (f pr.1, g pr.2)
@@ -32,9 +36,9 @@ namespace snippets01thru04
       | inr b => inr (g b)
 end snippets01thru04
 
--- 8.3 Functorial Algebraic Data Types
-
+-- 8.3 Functorial Algebraic Data Types ------------------------------------------
 namespace snippet05and06
+  -- snippet 05
   inductive Identity (α : Type u) where
     | identity : α → Identity α
   open Identity
@@ -64,7 +68,7 @@ namespace snippet08
   def Maybe a := Either (Const Unit a) (Identity a)
 end snippet08
 
-namespace snippet09thru12
+namespace snippet09thru13
   class Bifunctor (f : Type → Type → Type) where
     bimap : (a → c) → (b → d) → f a b → f c d
     first : (a → c) → f a b → f c b := λ g => bimap g id
@@ -113,7 +117,7 @@ namespace snippet14and15
   instance : Functor Tree where
     fmap := mapTree
 end snippet14and15
-
+-- 8.5 The Writer Functor -------------------------------------------------------
 namespace snippet16thru28
   class Functor (f : Type → Type) where
     fmap : (a → b) → f a → f b
@@ -131,7 +135,7 @@ namespace snippet16thru28
 
   -- snippet 18
   def ret : a → Writer a := λ x => (x, "")
--- (using "ret" here since "return" is a keyword in Lean)
+-- (using "ret" here since "return" is a Lean keyword)
 
   instance : Functor Writer where
     -- snippet 19
@@ -139,11 +143,12 @@ namespace snippet16thru28
 
   variable (r : Type)
 
+-- 8.6 Covariant and Contravariant Functors -------------------------------------
   -- snippet 20
   #check λ a => r → a
 
   -- snippet 21
-  def Reader (r a : Type) : Type := r → a
+  def Reader (r a : Type) := r → a
 
   -- snippet 22
   instance : Functor (Reader r) where
@@ -161,7 +166,7 @@ namespace snippet16thru28
 
   -- snippet 26
   instance : Contravariant (Op r) where
-    -- (b -> a) -> Op r a -> Op r b
+    -- (b → a) → Op r a → Op r b
     contramap := λ f g => g ∘ f
 
   -- snippet 27
@@ -172,8 +177,7 @@ namespace snippet16thru28
   -- contramap = flip (∘)
 end snippet16thru28
 
--- 8.7 Profunctors
-
+-- 8.7 Profunctors --------------------------------------------------------------
 namespace snippet29and30
   -- snippet 29
   class Profunctor (p : Type → Type → Type)  where

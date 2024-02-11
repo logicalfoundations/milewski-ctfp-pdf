@@ -1,2 +1,2 @@
-example : fst = p ∘ m' := sorry
-example : snd = q ∘ m' := sorry
+fst = p ∘ m'
+snd = q ∘ m'

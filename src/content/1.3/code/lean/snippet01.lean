@@ -1,3 +1,3 @@
 class Monoid (m : Type) where
-  mempty : m
+  mempty  : m
   mappend : m → m → m

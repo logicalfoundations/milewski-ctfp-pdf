@@ -1,2 +1,2 @@
-example : p () = fst (m ()) := sorry
-example : q () = snd (m ()) := sorry
+p () = fst (m ())
+q () = snd (m ())
