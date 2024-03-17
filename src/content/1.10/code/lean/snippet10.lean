@@ -1,2 +1,3 @@
-fmap f [] = []
-fmap f (x:xs) = f x : fmap f xs
+def fmap (f : a → b)(l : List a) : List b := match l with
+  | []      => []
+  | (x::xs) => f x :: fmap f xs
