@@ -1,1 +1,1 @@
-alpha :: F a -> G a
+α : F a → G a

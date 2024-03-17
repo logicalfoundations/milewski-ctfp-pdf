@@ -1,2 +1,3 @@
-fmap f Nothing = Nothing
-fmap f (Just x) = Just (f x)
+def fmap (f : a → b)(m : Maybe a) : Maybe b := match m with
+  | Nothing => Nothing
+  | Just x  => Just (f x)

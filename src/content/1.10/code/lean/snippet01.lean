@@ -1,1 +1,1 @@
-alpha :: forall a . F a -> G a
+α : ∀ a, F a → G a
